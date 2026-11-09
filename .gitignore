@@ -1,0 +1,22 @@
+# Credenciais do Streamlit (NUNCA subir para o GitHub)
+.streamlit/secrets.toml
+
+# Ambientes virtuais Python
+.venv/
+venv/
+env/
+
+# Caches do Python e Jupyter
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Pacotes ZIP brutos da CVM
+data/raw/*.zip
+
+# Arquivos de sistema operacional
+.DS_Store
+Thumbs.db
+
+# Script gerador auxiliar
+setup_projeto_linha1.py
