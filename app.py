@@ -108,23 +108,12 @@ CSV_PADRAO_PATH = BASE_DIR / "data" / "processed" / "cvm_indicadores_linha1_2021
 @st.cache_data(ttl=3600, show_spinner="Carregando demonstracoes financeiras padronizadas (CVM)...")
 def carregar_dados_resiliente() -> tuple[pd.DataFrame, str]:
     try:
-        if "connections" in st.secrets and "postgresql" in st.secrets["connections"]:
-            conn = st.connection("postgresql", type="sql")
-            query = "SELECT * FROM cvm_indicadores_linha1 ORDER BY ticker, ano;"
-            df_sql = conn.query(query, ttl=3600)
-            if not df_sql.empty:
-                df_sql.columns = [c.upper() for c in df_sql.columns]
-                return df_sql, "PostgreSQL Cloud (Supabase)"
-    except Exception:
-        pass
-
-    try:
         if CSV_TRATADO_PATH.exists():
             df_local = pd.read_csv(CSV_TRATADO_PATH)
-            return df_local, f"Contingencia Local CSV ({CSV_TRATADO_PATH.name})"
+            return df_local, f"Base Analitica CVM ({CSV_TRATADO_PATH.name})"
         elif CSV_PADRAO_PATH.exists():
             df_local = pd.read_csv(CSV_PADRAO_PATH)
-            return df_local, f"Contingencia Local CSV ({CSV_PADRAO_PATH.name})"
+            return df_local, f"Base Consolidada CVM ({CSV_PADRAO_PATH.name})"
         else:
             st.error(
                 "Arquivo de dados processados nao encontrado em `data/processed/`. "
@@ -132,7 +121,7 @@ def carregar_dados_resiliente() -> tuple[pd.DataFrame, str]:
             )
             st.stop()
     except Exception as e:
-        st.error(f"Erro critico ao carregar base de dados em contingencia: {e}")
+        st.error(f"Erro critico ao carregar a base de dados local: {e}")
         st.stop()
 
 

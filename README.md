@@ -7,7 +7,7 @@
 
 ## 1. Título e Resumo Executivo
 
-**BI Fundamentalista CVM (Linha 1 — Análise Fundamentalista & Contabilidade Corporativa)** é uma aplicação corporativa interativa de Business Intelligence e Analytics Financeiro desenvolvida em **Python**, **Streamlit**, **Plotly Express** e **PostgreSQL (Supabase)**.
+**BI Fundamentalista CVM (Linha 1 — Análise Fundamentalista & Contabilidade Corporativa)** é uma aplicação corporativa interativa de Business Intelligence e Analytics Financeiro desenvolvida em **Python**, **Pandas**, **Streamlit** e **Plotly Express**.
 
 O projeto investiga a saúde econômico-financeira, a eficiência operacional, o retorno aos acionistas e a estrutura de solvência/alavancagem de **12 companhias abertas de grande porte listadas na B3** durante o triênio pós-pandemia (**exercícios fiscais de 2021, 2022 e 2023**), a partir das **Demonstrações Financeiras Padronizadas (DFP)** oficiais submetidas à **Comissão de Valores Mobiliários (CVM)**.
 
@@ -56,7 +56,7 @@ No cenário de alta volatilidade macroeconômica entre 2021 e 2023 — marcado p
 
 ## 4. Pipeline de Engenharia de Dados (ETL)
 
-O pipeline reprodutível de Engenharia de Dados foi construído utilizando **caminhos 100% relativos** (`pathlib.Path`) e dividido em três módulos principais:
+O pipeline reprodutível de Engenharia de Dados foi construído utilizando **caminhos 100% relativos** (`pathlib.Path`) e dividido em três etapas modulares:
 
 1. **Extração e Padronização (`notebooks/eda_cvm_linha1.py`):**
    - Download automatizado dos pacotes `.zip` anuais diretamente do repositório oficial da CVM (2021, 2022 e 2023) com cache local em `data/raw/`.
@@ -68,15 +68,14 @@ O pipeline reprodutível de Engenharia de Dados foi construído utilizando **cam
    - Padronização de datas para formato ISO (`YYYY-MM-DD`).
    - Tratamento de valores ausentes decorrentes de particularidades contábeis setoriais (como o plano COSIF aplicável ao setor bancário em `ITUB4`), utilizando mediana setorial/anual com rastreabilidade explícita via flag booleana (`FLG_DADO_IMPUTADO`).
    - Detecção estatística de *outliers* pelo método do Intervalo Interquartil ($IQR = Q_3 - Q_1$) e *Z-Score*, gerando colunas suavizadas por *Winsorization* (`_CLIP`) e exportando um log de auditoria em `data/processed/auditoria_outliers_linha1.csv`.
-3. **Persistência Cloud e Contingência Resiliente (`src/load_postgres.py` e `app.py`):**
-   - Carga automatizada da tabela analítica tratada no banco **PostgreSQL (Supabase)** via `SQLAlchemy`.
-   - Leitura resiliente no Streamlit via `st.connection("postgresql", type="sql")` com *fallback* automático (`try/except`) para o arquivo CSV local em `data/processed/cvm_indicadores_linha1_tratado.csv`.
+3. **Carregamento Resiliente e Cache Otimizado (`app.py`):**
+   - Leitura estruturada da base analítica local (`data/processed/cvm_indicadores_linha1_tratado.csv`) protegida por bloco `try/except` com *fallback* automático para a base consolidada (`cvm_indicadores_linha1_2021_2023.csv`) e otimização em memória via decorador `@st.cache_data(ttl=3600)`.
 
 ---
 
 ## 5. Dicionário de Dados
 
-A tabela abaixo documenta a estrutura da base analítica processada (`cvm_indicadores_linha1_tratado.csv` / tabela SQL `cvm_indicadores_linha1`):
+A tabela abaixo documenta a estrutura da base analítica processada (`data/processed/cvm_indicadores_linha1_tratado.csv`):
 
 | Nome da Coluna | Tipo Primitivo | Descrição e Significado Financeiro | Regra de Cálculo / Origem CVM |
 | :--- | :--- | :--- | :--- |
@@ -108,8 +107,7 @@ A tabela abaixo documenta a estrutura da base analítica processada (`cvm_indica
 - **Pandas & NumPy**: Manipulação vetorial de séries contábeis, agregações multidimensionais, higienização de tipos e cálculos de *quantis*/IQR.
 - **Plotly Express & Graph Objects**: Construção dos 5 elementos visuais interativos de padrão executivo em tema Dark (barras agrupadas, barras horizontais ordenadas / mapa de árvore setorial, matriz de quadrantes com bolhas, *boxplot* setorial com rótulos codificados por cor e gráfico misto de eixo duplo para solvência).
 - **Streamlit**: Framework de *Data App* corporativo com gerenciamento de cache (`@st.cache_data`), persistência reativa de filtros (`st.session_state`), cartões de KPI (`st.metric`) e exportação instantânea (`st.download_button`).
-- **SQLAlchemy & psycopg2-binary**: Camada de abstração de banco de dados relacional para persistência e leitura no **PostgreSQL (Supabase)**.
-- **Requests**: Consumo automatizado dos pacotes de dados abertos da CVM via protocolo HTTPS.
+- **Requests & Zipfile**: Consumo automatizado e descompactação em memória dos pacotes de dados abertos da CVM via protocolo HTTPS.
 
 ---
 
@@ -184,15 +182,12 @@ source .venv/bin/activate
 # 3. Instale as dependências do projeto
 pip install -r requirements.txt
 
-# 4. (Opcional) Configure as credenciais do PostgreSQL/Supabase
-# Copie o arquivo .streamlit/secrets.toml.example para .streamlit/secrets.toml
-# Caso não configurado, o app utilizará automaticamente a contingência local em CSV.
-
-# 5. Execute o pipeline de extração CVM e limpeza/tratamento de dados
+# 4. (Opcional) Reprocesse o pipeline de extração CVM e limpeza de dados
+# (As bases tratadas já estão disponíveis em data/processed/)
 python notebooks/eda_cvm_linha1.py
 python src/etl_cleaning.py
 
-# 6. Inicie o Data App no Streamlit
+# 5. Inicie o Data App no Streamlit
 streamlit run app.py
 ```
 
@@ -211,11 +206,10 @@ streamlit run app.py
 ├── src/
 │   ├── __init__.py           # Inicializador do pacote modular
 │   ├── etl_cleaning.py       # Limpeza de nulos, imputação setorial e tratamento de outliers (IQR)
-│   ├── charts.py             # Módulo de visualizações analíticas em Plotly Express e Graph Objects
-│   └── load_postgres.py      # Script de carga da base tratada para PostgreSQL na nuvem (Supabase)
+│   └── charts.py             # Módulo de visualizações analíticas em Plotly Express e Graph Objects
 ├── .streamlit/
 │   ├── config.toml           # Padronização de tema Dark minimalista do Streamlit
-│   └── secrets.toml.example  # Modelo seguro de configuração de credenciais de banco de dados
+│   └── secrets.toml.example  # Modelo seguro de configuração de variáveis/segredos
 ├── app.py                    # Aplicação principal do Data App (Streamlit)
 ├── requirements.txt          # Dependências para reprodutibilidade e deploy no Streamlit Cloud
 ├── .gitignore                # Proteção de credenciais (secrets.toml), ambientes virtuais e caches
@@ -239,7 +233,7 @@ O planejamento, monitoramento e execução das tarefas do projeto foram conduzid
 | **ETL** — Extração das DFPs da CVM (2021–2023) e modelagem contábil | Engenharia de Dados | ✅ Concluído (*Done*) |
 | **ETL** — Padronização `datetime`, remoção de duplicatas e tratamento de nulos/outliers | Qualidade de Dados | ✅ Concluído (*Done*) |
 | **Visualização** — Desenvolvimento dos 5 gráficos interativos no Plotly Express | Visual Analytics | ✅ Concluído (*Done*) |
-| **Streamlit** — Configurar `@st.cache_data`, conexão resiliente e filtros com `session_state` | Arquitetura Cloud | ✅ Concluído (*Done*) |
+| **Streamlit** — Configurar `@st.cache_data`, leitura resiliente e filtros com `session_state` | Arquitetura Cloud | ✅ Concluído (*Done*) |
 | **Streamlit** — Criar 4 KPIs (`st.metric`), abas (`st.tabs`), Pirâmide Invertida e exportação | UX/UI & Storytelling | ✅ Concluído (*Done*) |
 | **Deploy & Entrega** — Documentação `README.md` (14 tópicos), Streamlit Cloud e Vídeo Pitch | Publicação & Pitch | 🔄 Em Andamento (*Doing*) |
 
@@ -258,5 +252,5 @@ O planejamento, monitoramento e execução das tarefas do projeto foram conduzid
 ### Referências Bibliográficas e Documentações Consultadas
 1. **Comissão de Valores Mobiliários (CVM).** *Portal de Dados Abertos — Demonstrações Financeiras Padronizadas (DFP) de Companhias Abertas (2021–2023).* Disponível em: https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/DFP/DADOS/
 2. **Assaf Neto, A.** *Estrutura e Análise de Balanços: Um Enfoque Econômico-Financeiro.* 12ª ed. São Paulo: Atlas, 2020.
-3. **Streamlit Documentation.** *Connect Streamlit to PostgreSQL & Caching (`st.cache_data`, `st.session_state`).* Disponível em: https://docs.streamlit.io/
+3. **Streamlit Documentation.** *Caching (`st.cache_data`) & Session State (`st.session_state`).* Disponível em: https://docs.streamlit.io/
 4. **Plotly Python Graphing Library.** *Plotly Express & Subplots Financial Visualizations.* Disponível em: https://plotly.com/python/
