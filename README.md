@@ -247,7 +247,6 @@ O planejamento, monitoramento e execução das tarefas do projeto foram conduzid
 
 - **Autor:** Victor Hugo
 - **Curso / Turma:** Visualização de Dados e Business Intelligence [T2] — SCTEC / LAB365 / SENAI Santa Catarina / Sistema FIESC
-- **Professor Orientador:** Savio Ricardo Garcia ([LinkedIn](https://www.linkedin.com/in/savioricardog/))
 
 ### Referências Bibliográficas e Documentações Consultadas
 1. **Comissão de Valores Mobiliários (CVM).** *Portal de Dados Abertos — Demonstrações Financeiras Padronizadas (DFP) de Companhias Abertas (2021–2023).* Disponível em: https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/DFP/DADOS/
