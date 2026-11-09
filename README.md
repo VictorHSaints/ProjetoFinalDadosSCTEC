@@ -245,7 +245,7 @@ O planejamento, monitoramento e execução das tarefas do projeto foram conduzid
 
 ## 14. Autoria e Créditos
 
-- **Autor:** Victor Hugo / Tiago *(adicione o link do perfil no LinkedIn)*
+- **Autor:** Victor Hugo
 - **Curso / Turma:** Visualização de Dados e Business Intelligence [T2] — SCTEC / LAB365 / SENAI Santa Catarina / Sistema FIESC
 - **Professor Orientador:** Savio Ricardo Garcia ([LinkedIn](https://www.linkedin.com/in/savioricardog/))
 
