@@ -1,5 +1,10 @@
 # 📊 Inteligência Fundamentalista & Contabilidade Corporativa (CVM / DFP) — Linha 1
 
+> 🚀 **Aplicação em Produção (Streamlit Community Cloud):** [https://projetofinalsctec3-67lzku9whwz6gv5tnxggxu.streamlit.app/](https://projetofinalsctec3-67lzku9whwz6gv5tnxggxu.streamlit.app/)  
+> 📋 **Quadro Kanban de Gestão Ágil (Trello):** [https://trello.com/invite/b/6af11647dfbaa34accb6b11e/ATTI90de37ac76add0819a76fc7ac35629d5964A6FE3/projeto-final](https://trello.com/invite/b/6af11647dfbaa34accb6b11e/ATTI90de37ac76add0819a76fc7ac35629d5964A6FE3/projeto-final)
+
+---
+
 ## 1. Título e Resumo Executivo
 
 **BI Fundamentalista CVM (Linha 1 — Análise Fundamentalista & Contabilidade Corporativa)** é uma aplicação corporativa interativa de Business Intelligence e Analytics Financeiro desenvolvida em **Python**, **Streamlit**, **Plotly Express** e **PostgreSQL (Supabase)**.
@@ -147,7 +152,7 @@ Esta solução apoia diretamente três perfis de decisão no mercado financeiro 
 
 ## 10. Demonstração do Data App (Streamlit)
 
-- 🔗 **Link Público da Aplicação em Produção (Streamlit Community Cloud):** *(Insira aqui a URL após o deploy, ex: `https://bi-fundamentalista-cvm-linha1.streamlit.app`)*
+- 🔗 **Link Público da Aplicação em Produção (Streamlit Community Cloud):** [https://projetofinalsctec3-67lzku9whwz6gv5tnxggxu.streamlit.app/](https://projetofinalsctec3-67lzku9whwz6gv5tnxggxu.streamlit.app/)
 
 ### Guia de Navegação da Interface
 1. **Barra Lateral Reativa (`st.sidebar`):** Possui no topo o botão de ação rápida **Resetar Filtros** (`st.session_state`), seguido pelos filtros dinâmicos cruzados por Exercícios Fiscais (`2021`, `2022`, `2023`), Setores Econômicos, Companhias (`Tickers`) e chave de suavização de *outliers* (*Winsorization IQR*).
@@ -166,8 +171,8 @@ Siga os passos abaixo para reproduzir integralmente o pipeline de ETL e executar
 
 ```bash
 # 1. Clone o repositório e acesse a pasta raiz
-git clone <URL_DO_SEU_REPOSITORIO_GITHUB>
-cd projeto-bi-cvm-linha1
+git clone https://github.com/VictorHSaints/ProjetoFinalSCTEC3.git
+cd ProjetoFinalSCTEC3
 
 # 2. Crie e ative um ambiente virtual Python
 python -m venv .venv
@@ -223,8 +228,8 @@ streamlit run app.py
 
 O planejamento, monitoramento e execução das tarefas do projeto foram conduzidos individualmente utilizando a metodologia ágil **Kanban no Trello**, estruturada nas colunas **Backlog**, **A Fazer (To Do)**, **Em Andamento (Doing)** e **Concluído (Done)**, com atribuição nominal em todos os cartões, especificações técnicas detalhadas e respeito rigoroso ao limite de *Work In Progress* (**WIP = 1 tarefa por vez**).
 
-- 📋 **Link Público do Quadro Kanban no Trello:** [Projeto Final — Quadro Kanban (Trello)](https://trello.com/invite/b/6af11647dfbaa34accb6b11e/ATTI90de37ac76add0819a76fc7ac35629d5964A6FE3/projeto-final)
-- 🚀 **Link da Aplicação no Streamlit Community Cloud:** *(Insira aqui o link público do deploy)*
+- 📋 **Link Público do Quadro Kanban no Trello:** [https://trello.com/invite/b/6af11647dfbaa34accb6b11e/ATTI90de37ac76add0819a76fc7ac35629d5964A6FE3/projeto-final](https://trello.com/invite/b/6af11647dfbaa34accb6b11e/ATTI90de37ac76add0819a76fc7ac35629d5964A6FE3/projeto-final)
+- 🚀 **Link da Aplicação no Streamlit Community Cloud:** [https://projetofinalsctec3-67lzku9whwz6gv5tnxggxu.streamlit.app/](https://projetofinalsctec3-67lzku9whwz6gv5tnxggxu.streamlit.app/)
 - 🎥 **Link do Vídeo de Apresentação (Pitch de 3 a 5 min):** *(Insira aqui o link do vídeo no YouTube/Drive/LinkedIn)*
 
 ### Entregas Rastreadas no Quadro Kanban
@@ -246,7 +251,7 @@ O planejamento, monitoramento e execução das tarefas do projeto foram conduzid
 
 ## 14. Autoria e Créditos
 
-- **Autor:** Tiago *(adicione seu sobrenome e link do perfil no LinkedIn)*
+- **Autor:** Victor Hugo / Tiago *(adicione o link do perfil no LinkedIn)*
 - **Curso / Turma:** Visualização de Dados e Business Intelligence [T2] — SCTEC / LAB365 / SENAI Santa Catarina / Sistema FIESC
 - **Professor Orientador:** Savio Ricardo Garcia ([LinkedIn](https://www.linkedin.com/in/savioricardog/))
 
